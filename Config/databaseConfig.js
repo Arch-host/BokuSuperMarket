@@ -1,0 +1,14 @@
+const mongose = require('mongoose');
+
+const connectDB = async () => {
+    try {
+        // const conn = await mongose.connect('mongodb://localhost:27017/'); static variable wont be use IRL
+        const conn = await mongose.connect(process.env.MONGO_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+        process.exit(1);
+    }
+};
+
+module.exports = connectDB;
