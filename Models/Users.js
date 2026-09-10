@@ -1,7 +1,7 @@
-const mongose = require('mongoose');
-const bcrypt = require('bcrypt.js');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
-const UserSchema = new mongose.Schema({
+const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -27,9 +27,11 @@ const UserSchema = new mongose.Schema({
         type: String,
         enum: ['admin', 'user'],
         default: 'user'
-    }, 
-    
-    timestamps: true //Date created and  modified 
-});
+    },  
+}, {timestamps: true}); //Date created and  modified
 
-const User = mongose.model('User', UserSchema); //Create model from schema 
+
+//Create model from schema 
+const User = mongoose.model('User', UserSchema);
+
+module.exports = User;
