@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -19,13 +18,17 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    hasAdminAccess: {
+        type: Boolean,
+        default: false
+    },
     phone: {
         type: String,
         required: true
     },
     role: {
         type: String,
-        enum: ['admin', 'user'],
+        enum: ['superadmin', 'storekeeper', 'salesperson'],
         default: 'user'
     },  
 }, {timestamps: true}); //Date created and  modified
