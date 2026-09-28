@@ -4,7 +4,6 @@ const router = express.Router();
 // import User controller
 const userController = require('../Controllers/UserController');
 
-
 //define the routes
 router.post('/createuser', userController.createUser);
 router.post('/loginuser', userController.loginUser);

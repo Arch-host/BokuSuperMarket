@@ -1,5 +1,6 @@
 const User = require('../Models/Users');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 //create a user
 exports.createUser = async (req, res) => {
@@ -7,6 +8,7 @@ exports.createUser = async (req, res) => {
 
         // request body validation
         const { name , email, password, gender, phone, role, hasAdminAccess } = req.body;
+        //console.log('Request body:', req.body); //log request body for debugging
 
         //check if all required fields are provided  (hasAdminAccess === undefined) ||
         if (!name || !email || !password || !gender || !phone || !role) {
@@ -36,19 +38,22 @@ exports.createUser = async (req, res) => {
             password: hashedPassword, 
             gender: req.body.gender, 
             phone: req.body.phone,
-            role: req.body.role || 'user', //Default role is 'user 
-            hasAdminAccess: req.body.hasAdminAccess || false // default is false if not provided
+            role: req.body.role,
+            hasAdminAccess: req.body.hasAdminAccess
         });
      
-        await user.save();
+        await user.save(); // save the user to the database
+
         res.status(201).json({ message: 'User created successfully', user });
+
     } catch (error) {
+        //console.error('Error creating user:', error); // if you want to log
         res.status(500).json({ message: 'Error creating user', error: error.message });
     }
     
 };
 
-//login user
+//login user 
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -61,7 +66,7 @@ exports.loginUser = async (req, res) => {
         //check if user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({message: 'User not found' });
+            return res.status(404).json({message: 'Invalid email or password' });
         }
 
         // check if password is correct
@@ -72,11 +77,9 @@ exports.loginUser = async (req, res) => {
 
         // generate a token (you can use JWT or any other)
         // const token generateToken(user); //implement your token generation login here
+        const token = jwt.sign({ id: user._id, email: user.email, name: user.name, role: user.role, hasAdminAccess: user.hasAdminAccess }, process.env.JWT_SECRET, { expiresIn: '1h'});
 
-        const jwt = require('jsonwebtoken');
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h'});
-
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: 'Login successful', token, role: user.role, hasAdminAccess: user.hasAdminAccess });
     } catch (error) {
         res.status(500).json({ message: 'Error logging in', error: error.message });
     }

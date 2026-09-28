@@ -1,19 +1,24 @@
 const express = require('express');
 const router = express.Router();
 
+// import authentication middleware
+const { protect } = require('../Middleware/auth');
+
+// import authorization middleware
+const { authorize } = require('../Middleware/role')
+
 // import product controller
 const productController = require('../Controllers/ProductController');
 
 //define the routes
-router.post('/createproduct', productController.createProduct);
+router.post('/createproduct', protect, authorize('superadmin'), productController.createProduct);
 
-router.get('/getallproducts', productController.getAllProducts);
+router.put('/updateproduct/:id', protect, authorize('storekeeper'), productController.updateProduct);
+router.get('/getproductbyid/:id', protect, productController.getProductById);
+router.get('/getallproducts', protect, productController.getAllProducts);
 
-router.get('/getproduct/:id', productController.getProductById);
 
-router.put('/updateproduct/:id', productController.updateProduct);
-
-router.delete('/deleteproduct/:id', productController.deleteProduct);
+router.delete('/deleteproduct/:id', protect, productController.deleteProduct);
 
 //export the router to be used in other files
 module.exports = router;

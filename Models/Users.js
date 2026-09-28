@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['superadmin', 'storekeeper', 'salesperson'],
-        default: 'user'
+        default: 'salesperson'
     },  
 }, {timestamps: true}); //Date created and  modified
 
@@ -37,4 +37,4 @@ const UserSchema = new mongoose.Schema({
 //Create model from schema 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = User;
+module.exports = User; // export model to be used in other file
