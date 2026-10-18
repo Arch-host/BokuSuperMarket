@@ -7,16 +7,21 @@ const { protect } = require('../Middleware/auth');
 // import authorization middleware
 const { authorize } = require('../Middleware/role')
 
+//import upload middleware
+const upload = require('../Middleware/upload');
+
 // import product controller
 const productController = require('../Controllers/ProductController');
 
 //define the routes
-router.post('/createproduct', protect, authorize('superadmin'), productController.createProduct);
+router.post('/createproduct', protect, productController.createProduct);
+
+router.post('/createproductwithimage', protect, upload.single('image'), productController.createProductWithImage);
 
 router.put('/updateproduct/:id', protect, authorize('storekeeper'), productController.updateProduct);
+
 router.get('/getproductbyid/:id', protect, productController.getProductById);
 router.get('/getallproducts', protect, productController.getAllProducts);
-
 
 router.delete('/deleteproduct/:id', protect, productController.deleteProduct);
 

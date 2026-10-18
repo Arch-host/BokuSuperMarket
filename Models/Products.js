@@ -22,6 +22,10 @@ const productSchema = new mongoose.Schema({
     },
     color: {
         type: String //optional property  
+    },
+    image: {
+        type: String,
+        required: false
     }
 },
 {timestamps: true} //Date created and  modified
@@ -30,5 +34,4 @@ const productSchema = new mongoose.Schema({
 
 //create model  from schema
 const Product = mongoose.model('Product', productSchema); //create model from schema
-
 module.exports = Product; //export the model to be used in other files
