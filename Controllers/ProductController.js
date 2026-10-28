@@ -1,6 +1,6 @@
 const upload = require('../Middleware/upload');
 const Product = require('../Models/Products');
-const sendEmail = require('../Middleware/emailSender');
+const sendEmail = require('../Middleware/emailsender');
 
 //create a product
 exports.createProduct = async (req, res) => {
